@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-// import Header from '../Header';
+import Header from './Header';
 // import Footer from '../Footer';
 // import SignUp from './SignUp';
 import Login from './Login';
@@ -16,7 +16,7 @@ class Default extends React.Component {
     render() {
         return (
             <div>
-              {/* <Header /> */}
+              <Header />
               <div className="main">
                   <Switch>
                       {/* <Route exact path="/" component={Top} /> */}
