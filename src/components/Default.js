@@ -1,12 +1,12 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Header from './Header';
-// import Footer from '../Footer';
+import Footer from './Footer';
+import Top from './Top';
 // import SignUp from './SignUp';
 import Login from './Login';
 // import MyPage from './MyPage';
 // import PostDetail from './PostDetail';
-// import Top from './Top';
 // import Logout from './Logout';
 
 //APIURL
@@ -19,7 +19,7 @@ class Default extends React.Component {
               <Header />
               <div className="main">
                   <Switch>
-                      {/* <Route exact path="/" component={Top} /> */}
+                      <Route exact path="/" component={Top} />
                       {/* <Route exact path="/signup" component={SignUp} /> */}
                       <Route exact path="/login" component={Login} />
                       {/* <Route exact path="/logout" component={Logout} />
@@ -28,7 +28,7 @@ class Default extends React.Component {
                       <Route render={() => <p>not found!.</p>} />
                   </Switch>
               </div>
-              {/* <Footer /> */}
+              <Footer />
             </div>
         );
     }

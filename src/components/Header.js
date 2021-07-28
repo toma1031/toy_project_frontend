@@ -1,12 +1,11 @@
 import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Header = (props) => {
 
     return (
       <div>
-        <Navbar bg="success" variant="dark">
+        <Navbar className="navbar navbar-dark bg-success">
           <Container>
             <Navbar.Brand href="/">Retro Toys</Navbar.Brand>
             <Nav className="me-right">
