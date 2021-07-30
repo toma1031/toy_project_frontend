@@ -1,4 +1,6 @@
-const Footer = (props) => {
+import React from 'react';
+
+const Footer = () => {
   return (
     // Bootstrap 4で固定フッターを実現する方法もとても簡単で、フッター要素に対しclassを一つ指定して上げるだけです。
     // class="fixed-bottom"を追加してあげるだけです。

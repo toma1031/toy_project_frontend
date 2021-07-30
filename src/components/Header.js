@@ -11,7 +11,7 @@ const Header = (props) => {
             <Nav className="me-right">
               <Nav.Link href="/">Top</Nav.Link>
               <Nav.Link href="/login">Login</Nav.Link>
-              <Nav.Link href="">Register</Nav.Link>
+              <Nav.Link href="/signup">Signup</Nav.Link>
             </Nav>
           </Container>
         </Navbar>

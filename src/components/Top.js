@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Top = (props) => {
+const Top = () => {
   return (
       <div className="">
         {/* ここに投稿を表示 */}

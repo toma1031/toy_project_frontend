@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import Top from './Top';
-// import SignUp from './SignUp';
+import Signup from './Signup';
 import Login from './Login';
 // import MyPage from './MyPage';
 // import PostDetail from './PostDetail';
@@ -20,7 +20,7 @@ class Default extends React.Component {
               <div className="main">
                   <Switch>
                       <Route exact path="/" component={Top} />
-                      {/* <Route exact path="/signup" component={SignUp} /> */}
+                      <Route exact path="/signup" component={Signup} />
                       <Route exact path="/login" component={Login} />
                       {/* <Route exact path="/logout" component={Logout} />
                       <Route exact path="/mypage" component={MyPage} />
