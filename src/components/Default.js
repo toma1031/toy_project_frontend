@@ -7,7 +7,7 @@ import Signup from './Signup';
 import Login from './Login';
 // import MyPage from './MyPage';
 // import PostDetail from './PostDetail';
-// import Logout from './Logout';
+import Logout from './Logout';
 
 //APIURL
 export const apiURL = 'http://localhost:8000/';
@@ -22,8 +22,8 @@ class Default extends React.Component {
                       <Route exact path="/" component={Top} />
                       <Route exact path="/signup" component={Signup} />
                       <Route exact path="/login" component={Login} />
-                      {/* <Route exact path="/logout" component={Logout} />
-                      <Route exact path="/mypage" component={MyPage} />
+                      <Route exact path="/logout" component={Logout} />
+                      {/* <Route exact path="/mypage" component={MyPage} />
                       <Route exact path="/post/:id" component={PostDetail} /> */}
                       <Route render={() => <p>not found!.</p>} />
                   </Switch>
