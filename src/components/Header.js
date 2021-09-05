@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 // useSelectorでReduxStoreから情報を取り出せる
 import { useSelector } from "react-redux";
+import { Link } from 'react-router-dom'
 
 const Header = (props) => {
   const isLoggedInOn = useSelector(state => state.user.isLoggedIn);
@@ -12,16 +13,34 @@ const Header = (props) => {
           <Container>
             <Navbar.Brand href="/">Retro Toys</Navbar.Brand>
             <Nav className="me-right">
-              <Nav.Link href="/">Top</Nav.Link>
+              {/* Nav.Link はページをリロードさせるので、Reduxのstateを維持できません。<Link>を用いる必要があります。
+              参考文献
+              https://qiita.com/k-penguin-sato/items/e46725edba00013a8300 */}
+              <Link to="/">Top</Link>
               {/* ログインしていない時、表示 */}
               {(isLoggedInOn === false) &&
-              <Nav.Link href="/login">Login</Nav.Link>}
+              <Link to="/login">Login</Link>}
               {/* ログインしていない時、表示 */}
               {(isLoggedInOn === false) &&
-              <Nav.Link href="/signup">Signup</Nav.Link>}
+              <Link to="/signup">Signup</Link>}
               {/* ログインしていたら表示する */}
               {(isLoggedInOn === true) &&
-              <Nav.Link href="/logout">Logout</Nav.Link>}
+              <Link to="/logout">Logout</Link>}
+              {/* ログインしていたら表示する */}
+              {(isLoggedInOn === true) &&
+              <Link to="/mypage">My Pgae</Link>}
+
+              {/* <Nav.Link href="/">Top</Nav.Link> */}
+              {/* ログインしていない時、表示 */}
+              {/* {(isLoggedInOn === false) &&
+              <Nav.Link href="/login">Login</Nav.Link>} */}
+              {/* ログインしていない時、表示 */}
+              {/* {(isLoggedInOn === false) &&
+              <Nav.Link href="/signup">Signup</Nav.Link>} */}
+              {/* ログインしていたら表示する */}
+              {/* {(isLoggedInOn === true) &&
+              <Nav.Link href="/logout">Logout</Nav.Link>} */}
+              
             </Nav>
           </Container>
         </Navbar>

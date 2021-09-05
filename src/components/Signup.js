@@ -25,12 +25,12 @@ const Signup = () => {
           },
         )
         .then(function(response){
-          alert("ユーザー登録完了！ログインしてください");
+          alert("Signup is completed! Please login.");
           // 新規登録完了したらpush()を用いてログイン画面に遷移させる
           history.push('/login');
         })
         .catch(err => {
-            alert("すでに登録されているメールアドレスorユーザー名です");
+            alert("Email address or user name that has already been registered.");
             console.log(err);
         });
       };
@@ -48,18 +48,18 @@ const Signup = () => {
       https://tamiblog.xyz/2020/03/14/post-405/ */}
       <form onSubmit={handleSubmit(signup)}>
       <label for="email">Email：</label>
-      <input placeholder="メールアドレス" className='form-control'
+      <input placeholder="Email address" className='form-control'
       {...register('email',
       { required: true,pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ })} />
-      {errors.email && <p>有効なメールアドレスを入力して下さい</p>}
+      {errors.email && <p>Please enter a valid email address</p>}
       <label for="name">UserName：</label>
-      <input placeholder="ユーザーネーム" className='form-control' {...register('name', { required: true })} />
-      {errors.name && <p>ユーザー名を入力して下さい</p>}
+      <input placeholder="Username" className='form-control' {...register('name', { required: true })} />
+      {errors.name && <p>Please enter your username</p>}
       <label for="password">Password：</label>
-      <input placeholder="パスワード 半角英数字6文字以上で入力してください" className='form-control'
+      <input placeholder="Please enter at least 6 single-byte alphanumeric characters" className='form-control'
       {...register('password', { required: true, minLength: 6 })} />
-      {errors.password && <p>パスワードは半角英数字6文字以上で入力して下さい</p>}
-      <input className='btn btn-secondary' type="submit" value="新規ユーザー登録" />
+      {errors.password && <p>Please enter at least 6 single-byte alphanumeric characters</p>}
+      <input className='btn btn-secondary' type="submit" value="Signup" />
       </form>
       </div>
     )

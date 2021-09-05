@@ -64,7 +64,7 @@ const getJwt = async (data) =>{
             <form onSubmit={handleSubmit(getJwt)}>
               <label for="username">Username：</label>
               <input className='form-control' {...register('username')} />
-              <label for="password">PassWord：</label>
+              <label for="password">Password：</label>
               <input className='form-control' type="password" {...register('password', { required: true })} />
               <input className='btn btn-secondary' type="submit" value="ログイン" />
             </form>

@@ -5,7 +5,7 @@ import Footer from './Footer';
 import Top from './Top';
 import Signup from './Signup';
 import Login from './Login';
-// import MyPage from './MyPage';
+import MyPage from './MyPage';
 // import PostDetail from './PostDetail';
 import Logout from './Logout';
 
@@ -23,8 +23,8 @@ class Default extends React.Component {
                       <Route exact path="/signup" component={Signup} />
                       <Route exact path="/login" component={Login} />
                       <Route exact path="/logout" component={Logout} />
-                      {/* <Route exact path="/mypage" component={MyPage} />
-                      <Route exact path="/post/:id" component={PostDetail} /> */}
+                      <Route exact path="/mypage" component={MyPage} />
+                      {/* <Route exact path="/post/:id" component={PostDetail} /> */}
                       <Route render={() => <p>not found!.</p>} />
                   </Switch>
               </div>
