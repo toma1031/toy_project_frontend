@@ -4,7 +4,10 @@ import Cookies from 'universal-cookie';
 import { apiURL } from './Default';
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-
+import { Link } from 'react-router-dom'
+import { useDispatch } from "react-redux";
+// 使いたいactionCreatorをimport、ここ追記
+import { setUserID } from "../stores/user";
 // 下記はユーザー情報表示用axios
 
 // universal-cookieを使用する際のインスタンス化として必要な記述です。本コンポーネントではCookieに格納してあるJWTをheaderに付加してリクエストを送る必要があるため、Cookieから‘accesstoken’を取得しなければなりません。（この記述です⇨{cookies.get(‘accesstoken’)}）
@@ -26,6 +29,8 @@ const MyPage = () => {
   // userSelectorは簡単に言うと、Redux Store内のstateを取得するメソッドです。Loginの際などにdispatch()を用いてRedux store内のstateを更新したかと思いますが、useSelectorでそのstateを取得できます。このコンポーネントが表示された際にユーザーがログインしているかしていないかはRedux Store内のstate（isLoggedIn）を取得しないと分かりません。ですので、useSelectorを用いてisLoggedInをstoreから取得しています。
   const isLoggedIn= useSelector(state => state.user.isLoggedIn);
 
+
+  const dispatch = useDispatch();
   // React Hook Form の初期化
   const { register, handleSubmit, setValue, errors } = useForm();
 
@@ -55,6 +60,16 @@ const MyPage = () => {
           setValue('zipcode',result.data.zipcode);
           setValue('phone_number',result.data.phone_number);
           setMyID(result.data.id);
+        // MyPage.js内で、‘users/ユーザーのID/’ というurlにアクセスできているのは、useEffect()内で‘mypage/’にgetリクエストを送り、ログインユーザーのIDをuseStateを用いて取得・格納しているためです。
+        // 次に、現在問題であるCancelMembership.js内で同様に‘users/ユーザーのID/’ というurlにアクセスできないのは、MyPage.jsのようにログインユーザーのIDをあらかじめ取得できていないためです。
+        // つまり、異なるコンポーネント間でstateを共有化したいときにRedux stateを使えば便利だという話です。
+        // 「id（Redux state）は定義しなくてもどこでも使える」という概念は半分間違いであり、store/users.jsで初期化したのち、どこかでその値をdiapatch（セット）しなければ初期化時の空の値しか得ることができません。userIDに値がなくパスワードのアップデートがうまく行っていないのは、dispatchができていないからです。
+        // 一度userIDにdispatchしてしまえば、その後はどこのコンポーネントでも使えるようになります。
+        // 送っていただいたコードのようにMyPage.jsにdispatch(setUserID(id))を記述するのであれば、そのidがDRFから返ってきている場所に記述しなければスクショのようにエラーが出ます。
+        // CancelMembership.jsでuserIDを使いたい場合は、Login.js（axiosでDRFにアクセスし、userIDの情報を取得できる部分）でisLoggedInOnと同様にsetUserIDを呼び出し、値をセットする必要があります。
+        // DRFでログインユーザーの情報を返すのはMyPageViewです。つまり、MyPageViewにアクセスするaxiosでuserIDを格納する必要があるかと思います。
+        // 正しい場所で呼び出したとしても、dispatch(setUserID());とすると引数が空ですので、userIDに値がはいりません。例えばidという名の変数の中身をdispatchしたい場合には、dispatch(setUserID(id)); と記述しなければ保存されません。
+          dispatch(setUserID(result.data.id));
         })
         // エラーハンドリングのため記載しています。例えばエラーハンドリングを行わないと重大なシステム不備になる可能性も出てきますので、axiosの最後には基本的に「エラーが出た場合」を考えて処理を書いておきます。実際にはこの部分でエラーをキャッチしたらalertを表示させたり強制的にページ遷移をさせたりしてエラーハンドリングを行います。
         .catch(err => {
@@ -213,9 +228,13 @@ const update = async (data) =>{
           <input className='form-control' defaultValue={phone_number} type="phone_number" {...register('phone_number')} />
           <input className='btn btn-secondary' type="submit" value="Update" />
           </form>
+          {/* リンクはDefault.jsの                      <Route exact path="/mypage_password_update" component={MyPagePasswordUpdate} />
+          の箇所で設定している */}
+          <Link to="/mypage_password_update">Need to Update Password</Link><br></br>
+          <Link to="/cancel_membership">Cancel Membership</Link>
         </div> :
         <div>
-              未ログイン
+              Logout
         </div>
       }
 

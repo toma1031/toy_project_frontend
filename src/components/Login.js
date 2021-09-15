@@ -9,6 +9,9 @@ import { apiURL } from './Default';
 import { useDispatch } from "react-redux";
 // 使いたいactionCreatorをimport
 import { isLoggedInOn } from "../stores/user";
+// ここ追記
+// CancelMembership.jsでuserIDを使いたい場合は、Login.js（axiosでDRFにアクセスし、userIDの情報を取得できる部分）でisLoggedInOnと同様にsetUserIDを呼び出し、値をセットする必要があります。
+import { setUserID } from "../stores/user";
 
 const Login = (props) => {
 // 質問１、下記はなんでしょうか？
@@ -42,15 +45,17 @@ const getJwt = async (data) =>{
       setCookie('accesstoken', response.data.access, { path: '/' }, { httpOnly: true });
 // リフレッシュトークンをブラウザのCookieに'refreshtoken'という名前で格納
       setCookie('refreshtoken', response.data.refresh, { path: '/' }, { httpOnly: true });
+
       // dispatchしたい部分でactionCreatorを呼び出す
       dispatch(isLoggedInOn());
+
       history.push('/');
 
     })
 // 認証リクエストが失敗した場合
     .catch(err => {
         console.log("miss");
-        alert("EmailかPasswordが違います");
+        alert("Email or Password is wrong!");
     });
   };
 
