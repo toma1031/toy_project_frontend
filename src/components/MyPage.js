@@ -34,6 +34,8 @@ const MyPage = () => {
   // React Hook Form の初期化
   const { register, handleSubmit, setValue, errors } = useForm();
 
+
+
   useEffect(() => {
     // fetchDataという関数を定義しています。すみません、Login.jsをお送りした際には関数を使用していない記述となっており僕が間違えていたのですが、useEffect内に直接処理を記述することはあまり推奨されていないようです。もちろんfetchData()を定義せず直接Login.jsの時のように記述しても問題なく動きます。おそらくuseEffect内に直接処理を記述しているとwarningが出ていると思います。（今後バージョンアップが進むとエラーになる可能性？）「useEffect内に直接処理を記述することは非推奨となっている」と考えていただければ良いです。基本的に式の中（ここではuseEffect）に非同期関数を埋め込む場合はasync function文を用います。
     async function fetchData(){
@@ -101,6 +103,7 @@ const update = async (data) =>{
             'Authorization': `JWT ${cookies.get('accesstoken')}`
           },
   // JWT取得のための認証情報をセット（tomato様の場合DRFの使用上、email⇨usernameだと思います）
+        
           username:data.username,
           email:data.email,
           password:data.password,

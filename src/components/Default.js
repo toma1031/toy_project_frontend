@@ -8,8 +8,10 @@ import Login from './Login';
 import MyPage from './MyPage';
 import MyPagePasswordUpdate from './MyPagePasswordUpdate';
 import CancelMembership from './CancelMembership';
-// import PostDetail from './PostDetail';
 import Logout from './Logout';
+import Post from './Post';
+
+
 
 //APIURL
 export const apiURL = 'http://localhost:8000/';
@@ -28,6 +30,7 @@ class Default extends React.Component {
                       <Route exact path="/mypage" component={MyPage} />
                       <Route exact path="/mypage_password_update" component={MyPagePasswordUpdate} />
                       <Route exact path="/cancel_membership" component={CancelMembership} />
+                      <Route exact path="/post" component={Post} />
                       {/* <Route exact path="/post/:id" component={PostDetail} /> */}
                       {/* URLが見つからなかったら下記を返す */}
                       <Route render={() => <p>not found!.</p>} />
