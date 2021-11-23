@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { apiURL } from './Default';
 import { useSelector } from "react-redux";
-import { Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 import { useDispatch } from "react-redux";
 import { setUserID } from "../stores/user";
@@ -13,8 +13,10 @@ const cookies = new Cookies();
 const Top = () => {
   // リストで定義するというのはつまり以下のような形です。
   // そしてpostの中にDRFから取得したデータを保存し、return内ではmap関数で処理すると、リストに格納したデータを1つずつ表示できると思います。
+  const {id} = useParams();
   const [post, setPost] = useState([]);
   const isLoggedIn= useSelector(state => state.user.isLoggedIn);
+  const userID= useSelector(state => state.user.userID);
   // ここ追記
   const dispatch = useDispatch();
 
@@ -22,7 +24,7 @@ const Top = () => {
     async function fetchData(){
       // posts/get_data/へGETリクエストを送りpostデータを格納する処理
       const result = await axios.get(
-        apiURL+'posts/get_data/',
+        apiURL+'posts/',
         {
           headers: {
               'Content-Type': 'application/json',
@@ -34,6 +36,7 @@ const Top = () => {
         })
         .then(result => {
           setPost(result.data);
+          console.log(userID)
           console.log(result.data[0].photo)
           console.log(result.data[0].title)
           console.log(result.data)
@@ -75,17 +78,18 @@ const Top = () => {
               {post.map(item => (
                 <div>
                   <p>Title: {item.title}</p>
-                  <p>Condition: {item.condition}</p>
+                  <p>Condition: {item.condition_name}</p>
                   <p>Maker: {item.maker}</p>
                   <p>Price: {item.price}</p>
                   <p>Description: {item.description}</p>
-                  <p>User: {item.user}</p>
+                  <p>User: {item.username}</p>
                   <p>Shipping price: {item.shipping_price}</p>
                   <img src={item.photo} />
                   <img src={item.photo2} />
                   <img src={item.photo3} />
                   <img src={item.photo4} />
                   <img src={item.photo5} />
+                  <Link to={`/post/${item.id}`} className='btn btn-secondary'>Detail</Link>
                 </div>
 
               ))}

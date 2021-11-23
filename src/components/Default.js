@@ -10,6 +10,7 @@ import MyPagePasswordUpdate from './MyPagePasswordUpdate';
 import CancelMembership from './CancelMembership';
 import Logout from './Logout';
 import Post from './Post';
+import PostDetail from './PostDetail';
 
 
 
@@ -31,7 +32,7 @@ class Default extends React.Component {
                       <Route exact path="/mypage_password_update" component={MyPagePasswordUpdate} />
                       <Route exact path="/cancel_membership" component={CancelMembership} />
                       <Route exact path="/post" component={Post} />
-                      {/* <Route exact path="/post/:id" component={PostDetail} /> */}
+                      <Route exact path="/post/:id" component={PostDetail} />
                       {/* URLが見つからなかったら下記を返す */}
                       <Route render={() => <p>not found!.</p>} />
                   </Switch>

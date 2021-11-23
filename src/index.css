@@ -12,7 +12,9 @@ code {
     monospace;
 }
 
-
+.main {
+ margin-bottom: 100px;
+}
 
 /* 追加 */
 .center-placement {
@@ -39,3 +41,5 @@ code {
 .footer-font {
   color: white;
 }
+
+

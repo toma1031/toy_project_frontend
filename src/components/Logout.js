@@ -7,6 +7,7 @@ import { Row, Container } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 // 使いたいactionCreatorをimport
 import { isLoggedInOff } from "../stores/user";
+import { clearUserID } from "../stores/user";
 
 const Logout = () => {
 
@@ -22,6 +23,8 @@ const Logout = () => {
       removeCookie('refreshtoken', { path: '/' }, { httpOnly: true });
       // dispatchしたい部分でactionCreatorを呼び出す
       dispatch(isLoggedInOff());
+      // ログアウトするとUserIDをここでクリアにする
+      dispatch(clearUserID());
       history.push('/');
       }
   );

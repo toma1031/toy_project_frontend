@@ -32,7 +32,7 @@ const MyPage = () => {
 
   const dispatch = useDispatch();
   // React Hook Form の初期化
-  const { register, handleSubmit, setValue, errors } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
 
 
@@ -147,8 +147,10 @@ const update = async (data) =>{
           <label for="username">Username：</label>
           {/* Form内に初期値を設定するにはdefaultValueで表示できる */}
           <input className='form-control' defaultValue={my_name} {...register('username', { required: true })} />
+          {errors.username && <p>Please put username</p>}
           <label for="email">Email：</label>
           <input className='form-control' defaultValue={my_email} type="email" {...register('email', { required: true })} />
+          {errors.email && <p>Please put email</p>}
           {/* <label for="password">Password：</label>
           <input className='form-control' type="password" {...register('password')} /> */}
           {/* ここでのstate（register（Hook Form）で用意している‘state’）は、useStateで用意している‘state’とは違い
@@ -223,12 +225,16 @@ const update = async (data) =>{
           三項演算子を用いて、ユーザーが登録しているstateと選択肢のidが一致する場合には<option>要素にselectedを追加、そうでない場合には普通の<option>要素を表示できるようになっています */}
           <label for="city">City：</label>
           <input className='form-control' defaultValue={city} type="city" {...register('city')} />
+          {errors.city && <p>Please put city</p>}
           <label for="address">Address：</label>
           <input className='form-control' defaultValue={address} type="address" {...register('address')} />
+          {errors.address && <p>Please put address</p>}
           <label for="zipcode">Zipcode：</label>
           <input className='form-control' defaultValue={zipcode} type="zipcode" {...register('zipcode')} />
+          {errors.zipcode && <p>Please put zipcode</p>}
           <label for="phone_number">Phone number：</label>
           <input className='form-control' defaultValue={phone_number} type="phone_number" {...register('phone_number')} />
+          {errors.phone_number && <p>Please put phone_number</p>}
           <input className='btn btn-secondary' type="submit" value="Update" />
           </form>
           {/* リンクはDefault.jsの                      <Route exact path="/mypage_password_update" component={MyPagePasswordUpdate} />
