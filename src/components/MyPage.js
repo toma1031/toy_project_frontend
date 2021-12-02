@@ -106,7 +106,7 @@ const update = async (data) =>{
         
           username:data.username,
           email:data.email,
-          password:data.password,
+          // password:data.password,
           state:data.state,
           // state:1,
           city:data.city,
@@ -121,6 +121,7 @@ const update = async (data) =>{
   // 認証リクエストが失敗した場合
       .catch(err => {
           console.log("miss");
+          console.log(data.email);
           alert("The characters are invalid");
       });
     };
