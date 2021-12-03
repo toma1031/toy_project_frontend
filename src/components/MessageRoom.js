@@ -10,33 +10,14 @@ import { useDispatch } from "react-redux";
 // universal-cookieを使用する際のインスタンス化として必要な記述です。本コンポーネントではCookieに格納してあるJWTをheaderに付加してリクエストを送る必要があるため、Cookieから‘accesstoken’を取得しなければなりません。（この記述です⇨{cookies.get(‘accesstoken’)}）
 const cookies = new Cookies();
 
-const PostDetail = () => {
+const MessageRoom = () => {
 
-  // １、useState()でphoto_dataに空の初期値を設定（今回の場合は写真データは後から入れ込むので初期値は空の状態にする）
-  // ２、setPhoto_dataでphoto_data変数を関数化（再度変数化みたいなもの？）する？
-  // ３、useEffect内などの発火させたい地点でsetXXXX（実際に入れ込みたいデータ）;とし、データを表示させる
   // useParam()を用いてURLからパラメータを取得している。
   // この部分
   // const {id} = useParams();
   // で変数 id にURLから取得したパラメータ（ここではQuestionのID）を格納
   const {id} = useParams();
-  
-  // resultはthen()内でしか参照できません。ですので、useStateなどを用いてコンポーネント全体で参照できる変数にその中身を格納して用いると良いと思います！！
-  // １、useState()でphoto_dataに空の初期値を設定（今回の場合は写真データは後から入れ込むので初期値は空の状態にする）
-  // ２、const [photo_data,の部分で変数を設定、setPhoto_dataはその変数の中身を更新するときに使用するといった感じですね。
-  // ３、useEffect内などの発火させたい地点でsetXXXX（実際に入れ込みたいデータ）;とし、データを表示させる
-  // 使い方はuseEffectなどで更新させたい箇所でsetPhoto_data（更新させたいデータの中身）みたいなイメージです。
-  // update_photoはuseStateで空のまま初期化
-  const [update_photo, setUpdatePhoto] = useState(null);
-  const [update_photo2, setUpdatePhoto2] = useState(null);
-  const [update_photo3, setUpdatePhoto3] = useState(null);
-  const [update_photo4, setUpdatePhoto4] = useState(null);
-  const [update_photo5, setUpdatePhoto5] = useState(null);
 
-
-  // そしてpostの中にDRFから取得したデータを保存し、return内ではmap関数で処理すると、リストに格納したデータを1つずつ表示できると思います。
-  const [post, setPost] = useState([]);
-  // userSelectorは簡単に言うと、Redux Store内のstateを取得するメソッドです。Loginの際などにdispatch()を用いてRedux store内のstateを更新したかと思いますが、useSelectorでそのstateを取得できます。このコンポーネントが表示された際にユーザーがログインしているかしていないかはRedux Store内のstate（isLoggedIn）を取得しないと分かりません。ですので、useSelectorを用いてisLoggedInをstoreから取得しています。
   const isLoggedIn= useSelector(state => state.user.isLoggedIn);
   const userID= useSelector(state => state.user.userID);
 
