@@ -11,8 +11,8 @@ import CancelMembership from './CancelMembership';
 import Logout from './Logout';
 import Post from './Post';
 import PostDetail from './PostDetail';
-
-
+import MessageRoom from './MessageRoom';
+import MessageRoomForOwner from './MessageRoomForOwner';
 
 //APIURL
 export const apiURL = 'http://localhost:8000/';
@@ -33,6 +33,8 @@ class Default extends React.Component {
                       <Route exact path="/cancel_membership" component={CancelMembership} />
                       <Route exact path="/post" component={Post} />
                       <Route exact path="/post/:id" component={PostDetail} />
+                      <Route exact path="/post/:id/open_messageroom" component={MessageRoom} />
+                      <Route exact path="/messagerooms/:id" component={MessageRoomForOwner} />
                       {/* URLが見つからなかったら下記を返す */}
                       <Route render={() => <p>not found!.</p>} />
                   </Switch>
@@ -42,5 +44,4 @@ class Default extends React.Component {
         );
     }
 }
-
 export default Default;

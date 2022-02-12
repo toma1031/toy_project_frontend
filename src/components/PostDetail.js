@@ -375,7 +375,7 @@ const post_update = async (data) =>{
                   <img src={post.photo3} />
                   <img src={post.photo4} />
                   <img src={post.photo5} />
-                  <Link to={"/"} className='btn btn-secondary'>Contact {post.username}</Link>
+                  <Link to={`/post/`+ post.id + `/open_messageroom`} className='btn btn-secondary'>Contact {post.username}</Link>
                 </div>
           </div>
           // 下記はログインしていないユーザー用のPostdeatilのページ

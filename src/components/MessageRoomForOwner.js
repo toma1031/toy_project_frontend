@@ -7,14 +7,12 @@ import { apiURL } from './Default';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 
-
 const cookies = new Cookies();
 
 
 // essageRoomそのもののConst
-const MessageRoom = () => {
+const MessageRoomForOwner = () => {
   // ここで各変数を定義
-  const history = useHistory();
   const [messages, setMessages] = useState([]);
   const [message_room, setMessageRoom] = useState([]);
   const [post_message, setPostMessage] = useState(false);
@@ -25,9 +23,9 @@ const MessageRoom = () => {
   // resetはFormが送信されたときに、打ち込んだテキストをリセットするときに使用する
   const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm();
 
-// メッセージルームをGetする用のミニConst（質問者用）
-  const getMessageRoom = async(data) => {
-    await axios.get(apiURL+'posts/'+ id + '/open_messageroom/',
+  // メッセージルームをGetする用のミニConst(投稿者用)
+  const getMessageRoomFromPostUser = async(data) => {
+    await axios.get(apiURL+'messagerooms/' + id,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -39,37 +37,8 @@ const MessageRoom = () => {
       // レスポンスのstatusは以下で取得可能です．
       // result.status
       if (result.status === 200) {
-
-          console.log(result.data);
-          console.log(result.data.post.user);
-          console.log(result.data.post);
-          console.log(result.data.inquiry_user);
-          console.log(result.data.id);
-          console.log(result.data.message_user);
-          setMessageRoom(result.data);
-          setMessages(result.data.messages);
-
-      }
-      // 投稿主、質問者がそれぞれ適切なメッセージルームのURLを開くには
-      // Postのオーナー情報（今回post.userとして取得しようとしている値）まで含めるようにDRFからのレスポンスを修正する
-      // DRF側で オーナー＝質問者 となる場合にエラーを返し、そのエラーステータスを元にReact側でエラーハンドリングする
-      // これらの解決策がありますが、下の方のDRFを修正する方が賢明です。
-      // 理由としては、DRFを今のまま修正せずReact側で場合分け処理をする場合
-      // レスポンスを元にリダイレクト or MessageRoomの表示を分岐しているので、一度MessageRoomは作られてしまいます。
-      // オーナー=質問者のMessageRoomが余分にDBに追加されることになりますので
-      // その余分なMessageRoomが作られる前にDRF側で対処する方が良いということです。
-      // DRFのopen_messageroom()内を修正してみてください。
-      // 具体的には、
-      // if オーナー == 質問者:
-      // return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
-      // というような処理を追加すれば良いと思います。
-      // そうすると、React側で
-      // if (レスポンスstatus === 406){
-      // history.push("リダイレクト先URL");
-      // }
-      // 複雑な処理を記述する必要がなくなり、statusコードのみで簡単にリダイレクト処理を記述可能です。
-      if (result.status === 406){
-        history.push('/messagerooms/'+id);
+        setMessageRoom(result.data);
+        setMessages(result.data.messages);
       }
 
       })
@@ -90,8 +59,9 @@ const MessageRoom = () => {
   // ですが、この例ですとuseEffectの第二引数にcountが指定されており、countが変更されるたびにuseEffectが発火し、再描画されることになります。
   // ＊countという変数は例ですが、このcountに指定した部分にあるフラグ（true or falseなど）を指定してあげて、MessageがPOSTされるたびにそのフラグを切り替えることで、MessageがPOSTされるたびに画面が再描画（画面上に新たなMessageが表示）されることとなります。
   useEffect(() => {
-    getMessageRoom();
+    getMessageRoomFromPostUser();
   },[post_message]);
+
 
   // メッセージをPostする用のミニConst
   const PostMessage = async (data) => {
@@ -177,5 +147,4 @@ const MessageRoom = () => {
     </div>
     )
 }
-export default MessageRoom;
-
+export default MessageRoomForOwner;
