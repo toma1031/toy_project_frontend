@@ -50,6 +50,8 @@ const MessageRoom = () => {
           setMessages(result.data.messages);
 
       }
+      })
+      .catch(err => {
       // 投稿主、質問者がそれぞれ適切なメッセージルームのURLを開くには
       // Postのオーナー情報（今回post.userとして取得しようとしている値）まで含めるようにDRFからのレスポンスを修正する
       // DRF側で オーナー＝質問者 となる場合にエラーを返し、そのエラーステータスを元にReact側でエラーハンドリングする
@@ -68,12 +70,15 @@ const MessageRoom = () => {
       // history.push("リダイレクト先URL");
       // }
       // 複雑な処理を記述する必要がなくなり、statusコードのみで簡単にリダイレクト処理を記述可能です。
-      if (result.status === 406){
+      // 406の場合、エラーのStatusですので、
+      // .catch(err
+      // の中に記述する必要があります。
+      // エラーの場合は、then()節には入らずcatch()節に入ります。
+      if (err.response.status === 406){
+        
         history.push('/messagerooms/'+id);
       }
-
-      })
-      .catch(err => {
+        console.log(err.response.status)
         console.log(err);
       });
   }
@@ -141,6 +146,33 @@ const MessageRoom = () => {
       alert("error");
       console.log(err);
     });
+  }
+
+
+  const getMessageRoomList = async(data) => {
+    await axios.get(apiURL+'messagerooms/',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${cookies.get('accesstoken')}`
+        },
+      })
+      .then(result => {
+      if (result.status === 200) {
+
+          console.log(result.data);
+          console.log(result.data.post.user);
+          console.log(result.data.post);
+          console.log(result.data.inquiry_user);
+          console.log(result.data.id);
+          console.log(result.data.message_user);
+          setMessageRoom(result.data);
+          setMessages(result.data.messages);
+
+      }
+      })
+      .catch(err => {
+      });
   }
 
   return(
