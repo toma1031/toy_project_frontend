@@ -31,6 +31,8 @@ const Header = (props) => {
               <Link to="/mypage">My Pgae</Link>}
               {(isLoggedInOn === true) &&
               <Link to="/post">Post</Link>}
+              {(isLoggedInOn === true) &&
+              <Link to="/messagerooms">Message Room</Link>}
 
               {/* <Nav.Link href="/">Top</Nav.Link> */}
               {/* ログインしていない時、表示 */}

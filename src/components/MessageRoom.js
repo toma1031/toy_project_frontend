@@ -149,32 +149,6 @@ const MessageRoom = () => {
   }
 
 
-  const getMessageRoomList = async(data) => {
-    await axios.get(apiURL+'messagerooms/',
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `JWT ${cookies.get('accesstoken')}`
-        },
-      })
-      .then(result => {
-      if (result.status === 200) {
-
-          console.log(result.data);
-          console.log(result.data.post.user);
-          console.log(result.data.post);
-          console.log(result.data.inquiry_user);
-          console.log(result.data.id);
-          console.log(result.data.message_user);
-          setMessageRoom(result.data);
-          setMessages(result.data.messages);
-
-      }
-      })
-      .catch(err => {
-      });
-  }
-
   return(
     <div>
         {/* 下記は過去のメッセージのやりとりを表示する用 */}
