@@ -76,7 +76,7 @@ const MessageRoom = () => {
       // エラーの場合は、then()節には入らずcatch()節に入ります。
       if (err.response.status === 406){
         
-        history.push('/messagerooms/'+id);
+        // history.push('/messagerooms/'+id);
       }
         console.log(err.response.status)
         console.log(err);

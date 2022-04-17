@@ -19,7 +19,7 @@ const Top = () => {
   const [post, setPost] = useState();
   const isLoggedIn= useSelector(state => state.user.isLoggedIn);
   const userID= useSelector(state => state.user.userID);
-
+  // ここ追記
   const dispatch = useDispatch();
 
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -27,12 +27,11 @@ const Top = () => {
   // Postがある状態のStateをuseStaeで設定
   const [len,setLen] = useState(0)
 
-  // flugの使い方は、ページボトム参照
+
   const [flug, setFlug] = useState(true)
-
-  // 「初期画面」を見分ける変数を用意してそこで条件分岐させる
-  const [initial_screen, setInitial] = useState(true)
-
+  // 「検索中 or 初期画面」を見分ける変数を用意してそこで条件分岐させる
+  const [initial_screen, setInitial] = useState()
+  const [searching_screen, setSeaching] = useState()
 
   useEffect(() => {
     async function fetchData(){
@@ -50,9 +49,7 @@ const Top = () => {
         })
         .then(result => {
           setPost(result.data);
-          setLen(result.data.length);
-          // 検索後Backボタンを押してTopに戻った時、BackボタンがあったらおかしいのでsetInitial(true)で初期画面を表示させるようにする
-          setInitial(true);
+          setLen(result.data.length)
           console.log(result.data.length)
           console.log(userID)
           console.log(result.data[0].photo)
@@ -114,10 +111,6 @@ const Top = () => {
         // 検索結果が数を格納
         setLen(result.data.length);
         setPost(result.data);
-        // 何らかの検索を行なった際には
-        // setInitial(false)
-        // とすれば下の検索画面が表示されるはずです。
-        setInitial(false);
         
       })
       .catch(err => {
@@ -140,9 +133,6 @@ const Top = () => {
             </form>
             <p>{len}</p>
             {len >= 1 ?
-            // 「初期画面」を見分ける変数を用意してそこで条件分岐させる
-            initial_screen ? 
-            <>
             <div>
               {post.map(item => (
                 <div>
@@ -161,32 +151,10 @@ const Top = () => {
                   <Link to={`/post/${item.id}`} className='btn btn-secondary'>Detail</Link>
                 </div>
               ))}
-            </div>
-            </>
-            :
-            <>
-            {/* setInitial(false)（検索後の画面）の時は下記を表示させてやる */}
-            <div>
-              {post.map(item => (
-                <div>
-                  <p>Title: {item.title}</p>
-                  <p>Condition: {item.condition_name}</p>
-                  <p>Maker: {item.maker}</p>
-                  <p>Price: {item.price}</p>
-                  <p>Description: {item.description}</p>
-                  <p>User: {item.username}</p>
-                  <p>Shipping price: {item.shipping_price}</p>
-                  <img src={item.photo} />
-                  <img src={item.photo2} />
-                  <img src={item.photo3} />
-                  <img src={item.photo4} />
-                  <img src={item.photo5} />
-                  <Link to={`/post/${item.id}`} className='btn btn-secondary'>Detail</Link>
-                </div>
-              ))}
+              {/* もし検索後の画面ならこのボタンを表示 */}
+              
               <button onClick={() => setFlug(!flug)} className='btn btn-secondary'>Back</button>
             </div>
-            </>
             :
             <div>
               <p>{len}</p>
@@ -199,63 +167,3 @@ const Top = () => {
 }
 
 export default Top;
-
-
-// ＊flugの使い方の説明＊
-
-// １、
-// まずflug変数をTureに設定しておく
-// const [flug, setFlug] = useState(true)
-// ２、
-// そして、ユーザーが下記のボタンを押します。
-// <button onClick={() => setFlug(!flug)} className='btn btn-secondary'>Back</button>
-// すると
-// !flugとあるので
-// tureでない状態に変更されます。
-// ３、
-// tureでない状態に変更されたということは
-// useEffectは、その第二引数に指定した変数が変更されたということ。
-// fetchData();
-//   },[flug]);
-// 上記の部分が!flugになったということ。
-// そして
-// useEffectは、その第二引数に指定した変数が変更されると再発火するというルールがあるので
-// useEffect内に
-// あるすべてのPostを引っ張ってくる下記のコードが作動し
-//     async function fetchData(){
-//       // posts/get_data/へGETリクエストを送りpostデータを格納する処理
-//       const result = await axios.get(
-//         apiURL+'posts/',
-//         {
-//           headers: {
-//               'Content-Type': 'application/json',
-//               // ここ追記
-//               // // ユーザーがログインした後、topページに遷移させuseEffect内にgetリクエストを記述し、storeにdispatchしています。
-//               // fetchData()内のpostを取得しているaxiosでheadersに、'Authorization'としてJWTを付加していることが問題です。ログインしていないユーザーならば、cookieにJWTを持っていないのでその部分を消す必要があります。
-//               // 'Authorization': `JWT ${cookies.get('accesstoken')}`
-//             }
-//         })
-//         .then(result => {
-//           setPost(result.data);
-//           setLen(result.data.length)
-//           console.log(result.data.length)
-//           console.log(userID)
-//           console.log(result.data[0].photo)
-//           console.log(result.data[0].title)
-//           console.log(result.data)
-//           console.log(isLoggedIn)
-//         })
-// 全ポストが表示されるという仕組み
-
-
-// trueでもfalseという文字列には意味はなく
-// <button onClick={() => setFlug(!flug)} className='btn btn-secondary'>Back</button>
-// をクリックすると
-// flug
-// がfalse→trueもしくはtrue→falseと変わって
-// 第二引数に指定した変数が変更されたという事実ができあがる。
-// そして第二引数に指定した変数が変更されるとUseEffectが発火する。
-// なのでfalse→trueだろうがtrue→falseだろうが
-// 変更されているにはかわりはない
-
-

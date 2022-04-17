@@ -143,6 +143,8 @@ const update = async (data) =>{
         // <div>
         //       未ログイン
         // </div>
+        // このregisterという部分は、imput要素のname属性と同じです。
+        // つまり、 name='title' と同義であり、setValueの'title'はそこで紐づけられます。
         <div class="update-block">
           <form onSubmit={handleSubmit(update)}>
           <label for="username">Username：</label>
