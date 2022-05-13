@@ -395,7 +395,7 @@ const post_update = async (data) =>{
                   <img src={post.photo3} />
                   <img src={post.photo4} />
                   <img src={post.photo5} />
-                  <Link to={"/login"} className='btn btn-secondary'>Sign up for sending message!</Link>
+                  <Link to={"/signup"} className='btn btn-secondary'>Sign up for sending message!</Link>
                 </div>
           </div>
         }

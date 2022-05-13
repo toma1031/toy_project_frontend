@@ -7,9 +7,14 @@ import { useCookies } from 'react-cookie';
 
 const Signup = () => {
     // HookのuseFormを使う
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm();
     const history = useHistory();
     const [cookies, setCookie, removeCookie] = useCookies();
+
+    // パスワード表示制御ようのstate
+    // 参考文献
+    // https://zenn.dev/dove/articles/cd1eb343a9e76bcd2066
+    const [isRevealPassword, setIsRevealPassword] = useState(false);
     // 下記の書き方の参考文献
     // https://qiita.com/soarflat/items/1a9613e023200bbebcb3
     const signup = async (data) =>{
@@ -56,9 +61,24 @@ const Signup = () => {
       <input placeholder="Username" className='form-control' {...register('name', { required: true })} />
       {errors.name && <p>Please enter your username</p>}
       <label for="password">Password：</label>
-      <input placeholder="Please enter at least 6 single-byte alphanumeric characters" className='form-control'
+      <input type={isRevealPassword ? 'text' : 'password'} placeholder="Please enter at least 6 single-byte alphanumeric characters" className='form-control'
       {...register('password', { required: true, minLength: 6 })} />
       {errors.password && <p>Please enter at least 6 single-byte alphanumeric characters</p>}
+
+      <label for="password_confirm">Confirm Password</label>
+               <input
+                   placeholder="Confirm Password"
+                   className='form-control'
+                   type="password"
+                   {...register('password_confirm',{
+                       validate: value =>
+                           value === getValues('password'),
+                           required: true,
+                           minLength: 6
+                   })}
+              />
+            {errors.password_confirm && <p style={{color:'#990033'}}>Password does not match!</p>}
+            
       <input className='btn btn-secondary' type="submit" value="Signup" />
       </form>
       </div>

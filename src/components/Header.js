@@ -17,6 +17,7 @@ const Header = (props) => {
               参考文献
               https://qiita.com/k-penguin-sato/items/e46725edba00013a8300 */}
               <Link to="/">Top</Link>
+              <Link to="/about">About</Link>
               {/* ログインしていない時、表示 */}
               {(isLoggedInOn === false) &&
               <Link to="/login">Login</Link>}
@@ -28,7 +29,7 @@ const Header = (props) => {
               <Link to="/logout">Logout</Link>}
               {/* ログインしていたら表示する */}
               {(isLoggedInOn === true) &&
-              <Link to="/mypage">My Pgae</Link>}
+              <Link to="/mypage">My Page</Link>}
               {(isLoggedInOn === true) &&
               <Link to="/post">Post</Link>}
               {(isLoggedInOn === true) &&

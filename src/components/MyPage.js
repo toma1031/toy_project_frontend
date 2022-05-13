@@ -37,6 +37,8 @@ const MyPage = () => {
 
 
   useEffect(() => {
+    // 以下のようにcookieの中身をlogに表示させて確認してみてください。
+    console.log(cookies.get('accesstoken'))
     // fetchDataという関数を定義しています。すみません、Login.jsをお送りした際には関数を使用していない記述となっており僕が間違えていたのですが、useEffect内に直接処理を記述することはあまり推奨されていないようです。もちろんfetchData()を定義せず直接Login.jsの時のように記述しても問題なく動きます。おそらくuseEffect内に直接処理を記述しているとwarningが出ていると思います。（今後バージョンアップが進むとエラーになる可能性？）「useEffect内に直接処理を記述することは非推奨となっている」と考えていただければ良いです。基本的に式の中（ここではuseEffect）に非同期関数を埋め込む場合はasync function文を用います。
     async function fetchData(){
       // axiosを使う文法は決まっており、基本的には同じ形です。まずLogin.jsとMyPage.jsの根本的な違いはGETかPOSTかです。Login.jsの際はJWT、つまりheaderを付加する必要がなかったが認証のための情報（username、password）を送信する必要がありました。それに対して今回はJWTを付加する必要がありましたので、このような記載になっています。もちろんGETでもPOSTでもJWTが必要となるリクエストには全て今回のようにheader内にJWTを付加する必要があります。
@@ -92,8 +94,9 @@ const stateList = [{text:"Alabama",id:1},{text:"Alaska",id:2},{text:"Arizona",id
 {text:"Vermont",id:46},{text:"CVirginia",id:47},{text:"Washington",id:48},{text:"West Virginia",id:49},{text:"Wisconsin",id:50},{text:"Wyoming",id:51},
 ];
 const update = async (data) =>{
+      console.log(cookies.get('accesstoken'))
   // Formで入力したデータがdataに格納されていることを確認
-      console.log(data)
+      // console.log(data)
   // JWT取得のためのDRF側のURLを指定（apiURLはDefault.jsで指定している）
       await axios.patch(`${apiURL}users/`+my_ID+'/',
         {
