@@ -15,6 +15,7 @@ import MessageRoom from './MessageRoom';
 import MessageRoomForOwner from './MessageRoomForOwner';
 import MessageRoomList from './MessageRoomList';
 import About from './About';
+import LikeButton from './LikeButton';
 
 //APIURL
 export const apiURL = 'http://localhost:8000/';
@@ -39,6 +40,7 @@ class Default extends React.Component {
                       <Route exact path="/messagerooms/:id" component={MessageRoomForOwner} />
                       <Route exact path="/messagerooms/" component={MessageRoomList} />
                       <Route exact path="/about/" component={About} />
+                      <Route exact path="/like/" component={LikeButton} />
                       {/* URLが見つからなかったら下記を返す */}
                       <Route render={() => <p>not found!.</p>} />
                   </Switch>

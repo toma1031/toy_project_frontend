@@ -45,6 +45,16 @@ const PostDetail = () => {
   // そのエラーの原因は以前にもありましたように、Hook Formのエラーの定義の仕方です。正しい定義方法は以下です。
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
+
+  // Likeする用
+  // const [ like, setLike ] = useState({});
+
+  // Likeしてあるか、していないか判断用
+  const [ liked, setLiked ] = useState(false);
+
+  // Like数表示用
+  const [ like_numbers, setLikeNumbers ] = useState(0);
+
   // 下記はDRFから既存のデータを取得する用
   useEffect(() => {
     // fetchDataという関数を定義しています。すみません、Login.jsをお送りした際には関数を使用していない記述となっており僕が間違えていたのですが、useEffect内に直接処理を記述することはあまり推奨されていないようです。もちろんfetchData()を定義せず直接Login.jsの時のように記述しても問題なく動きます。おそらくuseEffect内に直接処理を記述しているとwarningが出ていると思います。（今後バージョンアップが進むとエラーになる可能性？）「useEffect内に直接処理を記述することは非推奨となっている」と考えていただければ良いです。基本的に式の中（ここではuseEffect）に非同期関数を埋め込む場合はasync function文を用います。
@@ -73,6 +83,7 @@ const PostDetail = () => {
           console.log(result.data.condition);
           console.log(result.data.photo);
           console.log(result.data);
+          console.log(result.data.like_numbers);
           // ここでsetPostでconst [post, setPost] = useState([]);のpost変数にデータを取得させる
           setPost(result.data);
           // この部分でFormの初期値を直接指定している
@@ -82,6 +93,8 @@ const PostDetail = () => {
           setValue('price',result.data.price);
           setValue('description',result.data.description);
           setValue('shipping_price',result.data.shipping_price);
+
+          setLikeNumbers(result.data.like_numbers);
 
         })
         // エラーハンドリングのため記載しています。例えばエラーハンドリングを行わないと重大なシステム不備になる可能性も出てきますので、axiosの最後には基本的に「エラーが出た場合」を考えて処理を書いておきます。実際にはこの部分でエラーをキャッチしたらalertを表示させたり強制的にページ遷移をさせたりしてエラーハンドリングを行います。
@@ -95,7 +108,12 @@ const PostDetail = () => {
     }
   // この上の部分まででfetchData()という関数の定義を行なっており、この行のfetchData()で実際に関数を実行しています。先にも述べましたが、useEffect内に直接処理を書くことが非推奨なため先に関数fetchData()を定義した後実行するという流れです。また、その後の ,[]  の部分は以前にも申し上げましたが、useEffect内の処理が無限ループしてしまうことを防ぐため1回だけuseEffect内の処理を行なうという意味の記述です。
   fetchData();
-  },[]);
+  // judgeLiked関数を呼ぶことによってlikedという変数がそのポストにいいねしているかどうかの状態を持てることになります。逆に考えると、judgeLiked()をどこからも呼ばなければ、likedという変数には初期値のfalseしか入っていません。
+  // コンポーネントがレンダリングされる際に自動的に呼ばれる関数はuseEffect内に記述している関数だけです。judgeLiked()はuseEffect内には記述されていないし、どこかのタイミングで呼ばれていることもないので、関数として記述しているものの永遠に発火していない状況です。実際に発火しているかどうか確認するログを入れてみるとどこからも呼ばれていないことが明確に分かると思います。
+  // それを踏まえて、judgeLiked()を発火させることによってliked変数にポストをいいねしているかどうかの状態を持たせたい場合、どこで発火させるべきでしょうか？
+  // 答えはuseEffectの中です。judgeLiked()が役割を果たすのはただ一回、コンポーネントがレンダリングされる初回のみです。
+  judgeLiked();
+  },[liked]);
 
 // 下記はアップデート用axios
 const conditionList = [{text:"Brand New",id:1},{text:"Mint",id:2},{text:"Excellent",id:3},{text:"Very Good",id:4},{text:"Good",id:5},
@@ -266,6 +284,53 @@ const post_update = async (data) =>{
       });
   }
 
+  // Likeする用のミニConst
+  // いいねボタンを押した時に発火させる
+// Likeする用のミニConst
+// いいねボタンを押した時に発火させる
+const changeLiked = async() => {
+  console.log("changeLiked() 発火");
+  const result = await axios.get(apiURL+'posts/'+ id + '/like/',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${cookies.get('accesstoken')}`
+        },
+      })
+      .then(result => {
+        console.log(result.data);
+        // ここでlikedにデフォルトでSetされているfalseをtrueに切り替えることでlikeすることになる
+        setLiked(!liked);
+        console.log('like押した');
+      })
+      .catch(err => {
+        console.log(err);
+        console.log('like失敗');
+      });
+  }
+
+
+  // いいね状態の取得
+  // judgeLiked()によってsetLiked(result.data);される。
+  // 対象Postにいいね済みの場合　-> likedにtrueをセット（result.dataがtrue）
+  // 対象Postにいいね済みではない場合　-> likedにfalseをセット（result.dataがfalse）
+  const judgeLiked = async() => {
+    console.log("judgeLiked() 発火");
+    const result = await axios.get(apiURL+'posts/'+id+'/judgeLiked/',{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `JWT ${cookies.get('accesstoken')}`
+      }
+    })
+    .then(result => {
+      console.log(result.data);
+      setLiked(result.data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
     return (
       <div className="detail-body">
         {/* 他のコンポーネントで書いたようにreturn内で以下のように条件分岐を行わないとログインしていない場合にもpostができてしまいます。
@@ -376,6 +441,14 @@ const post_update = async (data) =>{
                   <img src={post.photo4} />
                   <img src={post.photo5} />
                   <Link to={`/post/`+ post.id + `/open_messageroom`} className='btn btn-secondary'>Contact {post.username}</Link>
+                  <>
+                    <button onClick={changeLiked}>
+                      {/* Likeしてあると✔を表示、していないと{like}でいいねできるようにする */}
+                    {liked ? '✔' : 'いいね！'}
+                    </button>
+                    {like_numbers}
+                  </>
+
                 </div>
           </div>
           // 下記はログインしていないユーザー用のPostdeatilのページ

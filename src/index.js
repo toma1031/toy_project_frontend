@@ -12,6 +12,7 @@ import store from "./stores/";
 
 
 ReactDOM.render(
+  // React側からStoreの中のデータを使うために<Provider>を使ってストアを呼び出しているといった意味
   <Provider store={store}>
     <App />
   </Provider>,

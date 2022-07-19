@@ -33,6 +33,11 @@ const Top = () => {
   // 「初期画面」を見分ける変数を用意してそこで条件分岐させる
   const [initial_screen, setInitial] = useState(true)
 
+  // Likeする用
+  const [ like, setLike ] = useState({});
+
+  // Like数表示用
+  const [ like_numbers, setLikeNumbers ] = useState(0);
 
   useEffect(() => {
     async function fetchData(){
@@ -53,6 +58,9 @@ const Top = () => {
           setLen(result.data.length);
           // 検索後Backボタンを押してTopに戻った時、BackボタンがあったらおかしいのでsetInitial(true)で初期画面を表示させるようにする
           setInitial(true);
+          // ここにいいね数も含めるようにする
+          setLikeNumbers(result.data.like_numbers);
+          console.log(result.data.like_numbers);
           console.log(result.data.length)
           console.log(userID)
           console.log(result.data[0].photo)
@@ -61,6 +69,7 @@ const Top = () => {
           console.log(isLoggedIn)
         })
         .catch(err => {
+          console.log("err");
           console.log(err);
         // useEffectを再度実行時にuseEffectの第二引数を指定、ここでは第二引数にflug変数を設定し、Backボタンを押した時にPost一覧が再描画がされるようにする
         });
@@ -124,7 +133,42 @@ const Top = () => {
         console.log("err");
         console.log(err)
       });
-}
+  }
+
+  
+  // Likeする用のミニConst
+  // いいねボタンを押した時に発火させる
+  const onClick = () => {
+    const Like = async(data) => {
+      await axios.post(apiURL+'posts/'+ id + '/like/',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${cookies.get('accesstoken')}`
+          },
+        })
+        .then(result => {
+        // もし、レスポンスがstatus=status.HTTP_200_OKであれば、すなわちLikeが既に作成済みであれば、下記を実行
+        // レスポンスのstatusは以下で取得可能です．
+        // result.status
+        if (result.status === 200) {
+          setLike(result.data.like);
+        }
+        })
+        .catch(err => {
+        // 406の場合、エラーのStatusですので、
+        // .catch(err
+        // の中に記述する必要があります。
+        // エラーの場合は、then()節には入らずcatch()節に入ります。
+        if (err.response.status === 406){
+          
+        }
+          console.log(err.response.status)
+          console.log(err);
+        });
+    }
+  }
+
 
   return (
       <div className="">
@@ -158,6 +202,12 @@ const Top = () => {
                   <img src={item.photo3} />
                   <img src={item.photo4} />
                   <img src={item.photo5} />
+                  <>
+                    <button onClick={onClick}>
+                    {like.liked ? '✔' : ''}いいね！
+                    </button>
+                    {like_numbers}
+                  </>
                   <Link to={`/post/${item.id}`} className='btn btn-secondary'>Detail</Link>
                 </div>
               ))}
@@ -181,6 +231,12 @@ const Top = () => {
                   <img src={item.photo3} />
                   <img src={item.photo4} />
                   <img src={item.photo5} />
+                  <>
+                    <button onClick={onClick}>
+                    {like.liked ? '✔' : ''}いいね！
+                    </button>
+                    {like_numbers.count}
+                  </>
                   <Link to={`/post/${item.id}`} className='btn btn-secondary'>Detail</Link>
                 </div>
               ))}
@@ -257,4 +313,5 @@ export default Top;
 // そして第二引数に指定した変数が変更されるとUseEffectが発火する。
 // なのでfalse→trueだろうがtrue→falseだろうが
 // 変更されているにはかわりはない
+
 
